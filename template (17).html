@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        :root {
+            --primary: #D46A54;       
+            --primary-hover: #BE5B46; 
+            --accent-yellow: #F2C14E; 
+            --accent-pink: #F28CAE;   
+            --surface: rgba(255, 255, 255, 0.85);
+            --surface-solid: #ffffff;
+            --text-main: #2D3A4A;     
+            --text-light: #7E8C9A;
+            --border: rgba(212, 106, 84, 0.2);        
+            --positive: #2F9C95;      
+            --negative: #E76F51;      
+            --radius: 24px;           
+            --alex-color: #2F9C95;    
+            --rachel-color: #F2C14E;  
+            --shadow-sm: 0 4px 15px rgba(212, 106, 84, 0.05);
+            --shadow-md: 0 10px 30px rgba(45, 58, 74, 0.08);
+            --shadow-lg: 0 20px 40px rgba(212, 106, 84, 0.12);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #FDFBF7;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(212, 106, 84, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 10%, rgba(242, 193, 78, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 90%, rgba(47, 156, 149, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 40px 20px; 
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, .header-title { font-family: 'Outfit', sans-serif; margin-top: 0; }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 20px 35px; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,0.5); flex-wrap: wrap; gap: 15px; }
+        h1 { font-weight: 800; font-size: 2.2rem; margin: 0; color: var(--primary); letter-spacing: -0.5px;}
+        
+        .card-header { font-weight: 800; font-size: 1.5rem; border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; transition: color 0.2s ease; color: var(--text-main);}
+        .card-header:hover { color: var(--primary); }
+        .card-header .header-title { display: flex; align-items: center; gap: 12px; }
+        .toggle-icon { font-size: 1rem; color: var(--primary); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(212,106,84,0.1); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;}
+        
+        .card-content { display: block; animation: fadeIn 0.4s ease-in-out; }
+        .card-content.collapsed { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .time-controls { display: flex; align-items: center; gap: 12px; background: var(--surface-solid); padding: 8px 12px; border-radius: 50px; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-sm); width: 100%; max-width: max-content;}
+        .time-controls select, .time-controls input { font-size: 1rem; font-weight: 700; padding: 10px 20px; border-radius: 30px; border: 2px solid transparent; background: #F6F4F0; outline: none; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: all 0.2s; color: var(--text-main); }
+        .time-controls select:hover, .time-controls select:focus, .time-controls input:focus { background: #fff; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(212, 106, 84, 0.1); }
+        
+        .card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: var(--radius); padding: 35px; margin-bottom: 30px; box-shadow: var(--shadow-md); transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); margin-top: 15px; background: var(--surface-solid);}
+        table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 500px; }
+        th, td { text-align: left; padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle; }
+        th { background-color: #FBF9F6; color: var(--text-light); font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; font-family: 'Outfit', sans-serif;}
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #FFFDF9; }
+
+        button { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-size: 15px; font-weight: 700; transition: all 0.2s; box-shadow: 0 6px 15px rgba(212, 106, 84, 0.25); }
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 106, 84, 0.35); }
+        button:active { transform: translateY(1px); }
+        
+        .btn-sheet { background: #2F9C95; box-shadow: 0 6px 15px rgba(47, 156, 149, 0.25); }
+        .btn-sheet:hover { background: #26807A; box-shadow: 0 8px 20px rgba(47, 156, 149, 0.35); }
+
+        button.danger { background: rgba(231, 111, 81, 0.1); color: var(--negative); box-shadow: none; padding: 8px 16px; border: none; border-radius: 20px; }
+        button.danger:hover { background: var(--negative); color: white; transform: translateY(0); box-shadow: 0 4px 10px rgba(231, 111, 81, 0.3); }
+
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+        .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        .file-upload-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; }
+
+        .input-group { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; background: #FBF9F6; padding: 15px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.04); }
+        .input-group input, .input-group select { padding: 12px 15px; border: 2px solid transparent; border-radius: 16px; flex: 1; min-width: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; background: white; box-shadow: var(--shadow-sm); color: var(--text-main); font-weight: 600;}
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary); }
+
+        .inline-input { width: 100px; padding: 10px 15px; border: 2px solid #EDEAED; border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700; text-align: right; transition: all 0.2s; color: var(--text-main); background: #fff;}
+        .inline-input:focus { border-color: var(--primary); outline: none; }
+        
+        .meta-input { padding: 4px 8px; border: 1px solid transparent; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-light); background: rgba(0,0,0,0.03); transition: all 0.2s; outline: none; }
+        .meta-input:hover, .meta-input:focus { background: #fff; border-color: var(--primary); color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+        .variation-note { color: var(--primary); font-size: 0.75rem; font-weight: 800; margin-top: 6px; background: rgba(212,106,84,0.1); padding: 4px 10px; border-radius: 50px; display: inline-block;}
+
+        .positive { color: var(--positive); font-weight: 800; }
+        .negative { color: var(--negative); font-weight: 800; }
+        
+        .totals-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 1.2rem; font-weight: 800; padding: 20px 25px; background: white; border-radius: 20px; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.03); }
+        
+        .progress-container { width: 100%; background-color: #F0EFEA; border-radius: 50px; height: 32px; overflow: hidden; display: flex; margin: 25px 0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .progress-bar { display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: 1px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; white-space: nowrap; }
+        .progress-bar.alex { background: linear-gradient(135deg, #43B5AE 0%, #2F9C95 100%); }
+        .progress-bar.rachel { background: linear-gradient(135deg, #FAD674 0%, #F2C14E 100%); color: #7A5C13;}
+        .progress-bar.allocated { background: linear-gradient(135deg, #E88E75 0%, #D46A54 100%); }
+        .progress-bar.unallocated { background-color: transparent; color: var(--text-light); }
+
+        .stat-box { text-align: center; background: white; border: 1px solid rgba(0,0,0,0.04); padding: 25px 20px; border-radius: 24px; box-shadow: var(--shadow-sm); position: relative; transition: transform 0.2s; }
+        .stat-box:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .stat-box span { display: block; font-size: 0.95rem; color: var(--text-light); margin-bottom: 12px; font-weight: 700; font-family: 'Outfit', sans-serif;}
+        .stat-box strong { font-size: 1.8rem; color: var(--text-main); font-weight: 800; }
+        .tax-breakdown { font-size: 0.85rem; color: var(--text-light); margin-top: 15px; text-align: left; background: #FDFBF7; padding: 15px; border-radius: 16px; line-height: 1.6; border: 1px solid rgba(0,0,0,0.03); }
+
+        .net-worth { text-align: center; padding: 40px; background: linear-gradient(135deg, #D46A54 0%, #E76F51 100%); border-radius: 30px; margin-top: 40px; color: white; font-weight: 800; box-shadow: 0 15px 35px rgba(212, 106, 84, 0.3); border: 2px solid rgba(255,255,255,0.2);}
+        .net-worth span:first-child { font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; opacity: 0.9; }
+
+        .transfer-card { background: white; padding: 25px; border-radius: 24px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;}
+        .transfer-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; }
+        .transfer-card.alex-theme::before { background: var(--alex-color); }
+        .transfer-card.rachel-theme::before { background: var(--rachel-color); }
+
+        .suggestion-box { display: none; background: #EAF5F4; color: #1C5E5A; padding: 20px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #BEE3E0; font-size: 0.95rem; line-height: 1.6; font-weight: 600; }
+
+        .schedule-config { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 20px 30px; border-radius: var(--radius); border: 2px dashed rgba(212, 106, 84, 0.3); margin-bottom: 30px; display: flex; gap: 25px; flex-wrap: wrap; align-items: center; box-shadow: var(--shadow-sm);}
+        .schedule-config label { font-weight: 700; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem; color: var(--text-light); }
+        .schedule-config select, .schedule-config input { padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text-main); outline: none;}
+        .schedule-config select:focus, .schedule-config input:focus { border-color: var(--primary); }
+
+        .badge { background:#F0EFEA; padding:6px 12px; border-radius:10px; font-size:0.8rem; font-weight:800; font-family:'Outfit',sans-serif; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
+
+        /* ✨ MAGIC MOBILE CARD LAYOUT (No Horizontal Scrolling) ✨ */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .header { padding: 20px; flex-direction: column; align-items: stretch; text-align: center; border-radius: 20px; }
+            .controls { flex-direction: column; width: 100%; }
+            .controls button, .file-upload-wrapper button { width: 100%; }
+            .time-controls { flex-direction: column; width: 100%; max-width: 100%; box-sizing: border-box; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 20px; }
+            .card { padding: 20px; }
+            
+            .input-group { flex-direction: column; align-items: stretch; padding: 20px 15px; }
+            .input-group input, .input-group select, .input-group button { width: 100%; max-width: 100%; box-sizing: border-box; margin-bottom: 10px; flex: none !important;}
+            
+            /* Hide standard table UI */
+            .table-responsive { overflow: hidden; border: none; background: transparent; }
+            table, thead, tbody, th, td, tr { display: block; width: 100%; box-sizing: border-box; }
+            thead { display: none; }
+            
+            /* Render Rows as Cards */
+            tr { margin-bottom: 20px; background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); padding: 15px; box-shadow: var(--shadow-sm); }
+            td { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); text-align: left; align-items: flex-start;}
+            td:last-child { border-bottom: none; padding-bottom: 0; align-items: center; justify-content: center; }
+            
+            /* Inject Column Headers as Labels */
+            td::before { content: attr(data-label); display: block; font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; font-family: 'Outfit', sans-serif;}
+            
+            /* Force inputs to stretch beautifully inside mobile cards */
+            td > div { width: 100%; }
+            .meta-input, .inline-input, select.meta-input { width: 100% !important; max-width: 100% !important; margin-bottom: 5px; box-sizing: border-box;}
+            .badge { display: inline-block; margin-top: 5px;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>✨ Family Finance Hub</h1>
+        
+        <div class="time-controls">
+            <span style="font-size:1.1rem; color:var(--text-light); font-family:'Outfit',sans-serif;">📅 View:</span>
+            <select id="monthSelector" onchange="renderAll()">
+                <option value="-1">🗓️ Entire Year (Averages)</option>
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+            </select>
+            <label id="applyRestContainer" style="display:none; font-size:0.95rem; font-weight:700; color:var(--text-main); cursor:pointer; align-items:center; gap:8px; justify-content: center;">
+                <input type="checkbox" id="applyRest" checked style="width:18px; height:18px; cursor:pointer; accent-color: var(--primary);"> 
+                Apply Forward
+            </label>
+        </div>
+
+        <div class="controls">
+            <button id="backupBtn" class="btn-sheet" onclick="backupToGoogleSheets()">☁️ Backup to Sheets</button>
+            <button onclick="downloadData()" style="background: var(--accent-yellow); color: #7A5C13; box-shadow: 0 6px 15px rgba(242, 193, 78, 0.3);">💾 Save File</button>
+            <div class="file-upload-wrapper">
+                <button style="background: #E8E5DF; color: var(--text-main); box-shadow: none;">📂 Load File</button>
+                <input type="file" id="uploadInput" accept=".json" onchange="handleUpload(event)">
+            </div>
+        </div>
+    </div>
+
+    <div class="schedule-config">
+        <div style="font-size: 1.3rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--primary); margin-right: 15px;">🗓️ Pay Engine</div>
+        <label>
+            Target Year
+            <input type="number" id="configYear" value="2026" onchange="renderAll()" style="width: 90px;">
+        </label>
+        <label>
+            Pay Frequency
+            <select id="configFreq" onchange="renderAll()">
+                <option value="biweekly" selected>Bi-weekly</option>
+                <option value="weekly">Weekly</option>
+                <option value="semimonthly">Semi-monthly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </label>
+        <label>
+            Anchor Pay Date
+            <input type="date" id="configDate" value="2026-05-08" onchange="renderAll()">
+        </label>
+    </div>
+
+    <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+            <div class="header-title"><span>⚖️</span> Salary, Taxes & Split</div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="card-content">
+            <p style="font-size: 0.95rem; color: var(--text-light); margin-top:-5px; margin-bottom: 25px; line-height:1.6;">
+                <span id="salaryInstructions" style="font-weight: 700; color: var(--primary); background: rgba(212,106,84,0.1); padding: 6px 12px; border-radius: 8px;">Showing Average Yearly equivalent. Editing here updates the whole year.</span><br><br>
+                Contributions are automatically derived based on your <b>Gross Income</b> for the selected period.
+            </p>
+            
+            <div class="grid-3" style="margin-bottom: 30px;">
+                <div class="stat-box" style="border-top: 6px solid var(--alex-color);">
+                    <span style="color: var(--alex-color);">👨 Alex Annual Base</span>
+                    <div style="display:flex; align-items:center; justify-content:center;">
+                        <span style="font-size: 1.4rem; font-weight:800; margin-right:8px; color: #A1AAB3;">$</span>
+                        <input type="number" id="grossAlex" onchange="updateSalary('alex', this.value)" class="inline-input" style="width: 100%; max-width: 140px;">
+                    </div>
+                    <div id="noteAlex" style="min-height:25px; margin-top:5px;"></div>
+                    <div class="tax-breakdown" id="taxAlex"></div>
+                </div>
+                
+                <div class="stat-box" style="border-top: 6px solid var(--rachel-color);">
+                    <span style="color: #D49C1C;">👩 Rachel Annual Base</span>
+                    <div style="display:flex; align-items:center; justify-content:center;">
+                        <span style="font-size: 1.4rem; font-weight:800; margin-right:8px; color: #A1AAB3;">$</span>
+                        <input type="number" id="grossRachel" onchange="updateSalary('rachel', this.value)" class="inline-input" style="width: 100%; max-width: 140px;">
+                    </div>
+                    <div id="noteRachel" style="min-height:25px; margin-top:5px;"></div>
+                    <div class="tax-breakdown" id="taxRachel"></div>
+                </div>
+                
+                <div class="stat-box" style="border-top: 6px solid var(--positive); display: flex; flex-direction: column; justify-content: center; background: #F3FAFA;">
+                    <span id="netMonthlyLabel" style="color: #1C5E5A;">Average Net Monthly</span>
+                    <strong id="displayTotalNetMonthly" class="positive" style="font-size: 2.2rem;">$0.00</strong>
+                    <div style="margin-top:20px; padding-top: 15px; border-top: 1px dashed #BEE3E0;">
+                        <span id="grossLabel" style="margin-bottom: 4px; color: #26807A;">Combined Gross Rate</span>
+                        <strong id="displayTotalGross" style="font-size: 1.3rem; color: #1C5E5A;">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-container" id="incomeSplitBar">
+                <div class="progress-bar alex" id="barAlex" style="width: 50%;">ALEX 50%</div>
+                <div class="progress-bar rachel" id="barRachel" style="width: 50%;">RACHEL 50%</div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="transfer-card alex-theme">
+                    <h4 style="margin: 0 0 15px 0; color: #1A5450; font-size: 1.1rem; display: flex; justify-content: space-between;">
+                        <span>👨 Alex to Joint</span>
+                        <span style="opacity:0.5;">🏦</span>
+                    </h4>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--alex-color); margin-bottom: 15px;" id="transferAlex">$0.00</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); background: #F9FDFD; padding: 15px; border-radius: 16px; line-height: 1.8;">
+                        <div style="display:flex; justify-content: space-between; font-weight:700; color:var(--text-main); margin-bottom: 8px;"><span>Total Available Funds:</span> <span id="availAlex" class="positive">$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between;"><span>- Joint Core Share (<span class="splitAlexPct">0</span>%):</span> <span id="coreShareAlex" style="font-weight:700;">-$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between; color: var(--negative);"><span>- Share of Rachel's Subs:</span> <span id="alexShareOfRachelSubs">-$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between; color: var(--positive); border-top: 1px dashed rgba(0,0,0,0.1); margin-top:8px; padding-top:8px;"><span>+ Rachel's Share of Your Subs:</span> <span id="rachelShareOfAlexSubs">+$0.00</span></div>
+                    </div>
+                </div>
+                
+                <div class="transfer-card rachel-theme">
+                    <h4 style="margin: 0 0 15px 0; color: #9A7112; font-size: 1.1rem; display: flex; justify-content: space-between;">
+                        <span>👩 Rachel to Joint</span>
+                        <span style="opacity:0.5;">🏦</span>
+                    </h4>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: #D49C1C; margin-bottom: 15px;" id="transferRachel">$0.00</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light); background: #FFFCF5; padding: 15px; border-radius: 16px; line-height: 1.8;">
+                        <div style="display:flex; justify-content: space-between; font-weight:700; color:var(--text-main); margin-bottom: 8px;"><span>Total Available Funds:</span> <span id="availRachel" class="positive">$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between;"><span>- Joint Core Share (<span class="splitRachelPct">0</span>%):</span> <span id="coreShareRachel" style="font-weight:700;">-$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between; color: var(--negative);"><span>- Share of Alex's Subs:</span> <span id="rachelShareOfAlexSubs2">-$0.00</span></div>
+                        <div style="display:flex; justify-content: space-between; color: var(--positive); border-top: 1px dashed rgba(0,0,0,0.1); margin-top:8px; padding-top:8px;"><span>+ Alex's Share of Your Subs:</span> <span id="alexShareOfRachelSubs2">+$0.00</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" onclick="toggleCard(this)">
+            <div class="header-title"><span>🎯</span> <span id="surplusTitle">Surplus & Goals Planner</span></div>
+            <div class="toggle-icon">▼</div>
+        </div>
+        <div class="card-content">
+            
+            <div id="debtSuggestionBox" class="suggestion-box"></div>
+
+            <div class="totals-row" style="background: #F3FAFA; border: none; flex-direction:column; gap:12px; align-items: stretch; padding: 25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap;">
+                    <span style="color: #1C5E5A; font-family:'Outfit', sans-serif;">1. Household Surplus (Before Goals):</span>
+                    <span id="totalSurplusDisplay" style="font-size: 2.2rem; color: var(--positive); font-weight: 800;">$0.00</span>
+                </div>
+            </div>
+
+            <div class="progress-container" style="height: 36px; margin: 30px 0;">
+                <div class="progress-bar allocated" id="barAllocated" style="width: 0%;">ALLOCATED</div>
+                <div class="progress-bar unallocated" id="barUnallocated" style="width: 100%;">UNALLOCATED</div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="newGoalName" placeholder="Fund Name" autocomplete="off" style="flex: 1.5; min-width: 120px;">
+                <input type="date" id="newGoalDay" title="Transfer Date" style="flex: 1; min-width: 120px;">
+                <select id="newGoalAccount" style="flex: 1.5; min-width: 130px;"></select>
+
+                <input type="number" id="newGoalAmount" placeholder="Amount" step="0.01" style="min-width: 90px; flex: 1;">
+                <select id="newGoalType" style="min-width: 120px; flex: 1;">
+                    <option value="fixed">$ Fixed Amount</option>
+                    <option value="percent">% of Surplus</option>
+                </select>
+                <select id="newGoalOwner" style="min-width: 90px; flex: 1;">
+                    <option value="Joint" selected>🧑‍🤝‍🧑 Joint</option>
+                    <option value="Alex">👨 Alex</option>
+                    <option value="Rachel">👩 Rachel</option>
+                </select>
+                <button onclick="addSurplusGoal()">Add Goal ✨</button>
+            </div>
+            
+            <div class="table-responsive">
+                <table id="surplusTable">
+                    <thead><tr><th>Fund Goal & Details</th><th>Owner</th><th>Allocation Strategy</th><th style="width: 60px;"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="totals-row" style="margin-top: 35px; background: white; border: 1px solid rgba(0,0,0,0.05); flex-direction:column; gap:20px; align-items: stretch; padding: 30px;">
+                <div style="text-align: center; border-bottom: 2px dashed rgba(0,0,0,0.05); padding-bottom: 20px;">
+                    <h3 style="margin:0; color: var(--text-main); font-size: 1.5rem;">2. Guilt-Free Spending Money 🛍️</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-light); font-weight: 600; margin: 8px 0 0 0;">Your personal pocket money after all bills and goals are funded.</p>
+                </div>
+                
+                <div style="display:flex; justify-content:space-around; align-items:center; padding-top: 10px; gap: 25px; flex-wrap: wrap;">
+                    <div style="background: #F9FDFD; border: 1px solid #BEE3E0; padding: 25px; border-radius: 20px; text-align: center; flex: 1; min-width: 220px;">
+                        <span style="color: #1A5450; font-weight: 800; font-family:'Outfit',sans-serif; font-size: 1.1rem; display:block; margin-bottom: 8px;">👨 Alex's Spending</span>
+                        <span id="alexSpendDisplay" style="font-size: 2.5rem; font-weight: 800; color: var(--alex-color);">$0.00</span>
+                    </div>
+                    <div style="background: #FFFCF5; border: 1px solid #FAD674; padding: 25px; border-radius: 20px; text-align: center; flex: 1; min-width: 220px;">
+                        <span style="color: #9A7112; font-weight: 800; font-family:'Outfit',sans-serif; font-size: 1.1rem; display:block; margin-bottom: 8px;">👩 Rachel's Spending</span>
+                        <span id="rachelSpendDisplay" style="font-size: 2.5rem; font-weight: 800; color: #D49C1C;">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="header-title"><span>🧾</span> Joint Bills</div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="card-content collapsed">
+                <div class="input-group">
+                    <input type="text" id="newBudgetName" placeholder="Bill Name" style="flex: 2; min-width: 120px;">
+                    <input type="date" id="newBudgetDay" title="Payment Date" style="flex: 1; min-width: 120px;">
+                    <select id="newBudgetAccount" style="flex: 1.5; min-width: 130px;"></select>
+                    <input type="number" id="newBudgetAmount" placeholder="Amount ($)" step="0.01" style="flex: 1.5; min-width: 90px;">
+                    <button onclick="addBudget()">Add</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="budgetTable">
+                        <thead><tr><th>Item Details</th><th>Cost</th><th style="width: 40px;"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="totals-row" style="background: #FFF5F3; border:none;">
+                    <span style="color: var(--negative); font-family:'Outfit',sans-serif;">Total Bills:</span>
+                    <span id="totalBudgetDisplay" class="negative">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="header-title"><span>📱</span> Subscriptions</div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="card-content collapsed">
+                <div class="input-group">
+                    <input type="text" id="newSubName" placeholder="Name" style="flex: 1.5; min-width: 100px;">
+                    <input type="date" id="newSubDay" title="Payment Date" style="flex: 1; min-width: 120px;">
+                    <select id="newSubAccount" style="flex: 1.5; min-width: 130px;"></select>
+                    <input type="number" id="newSubPrice" placeholder="$" step="0.01" style="flex: 1; min-width: 70px;">
+                    <select id="newSubPayer" style="flex: 1; min-width: 90px;">
+                        <option value="" disabled selected>Payer</option>
+                        <option value="Joint">Joint</option>
+                        <option value="Alex">Alex</option>
+                        <option value="Rachel">Rachel</option>
+                        <option value="Eloise">Eloise</option>
+                    </select>
+                    <button onclick="addSub()">Add</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="subsTable">
+                        <thead><tr><th>Service Details</th><th>Cost</th><th>Payer</th><th style="width: 40px;"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="header-title"><span>📈</span> Assets</div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="card-content collapsed"> 
+                <p style="font-size: 0.9rem; color: var(--text-light); margin-top:-10px;">Bank accounts, TFSA, RRSP, Property value.</p>
+                <div class="input-group">
+                    <input type="text" id="newAssetName" placeholder="Asset Name">
+                    <input type="number" id="newAssetValue" placeholder="Starting Base ($)" step="0.01">
+                    <select id="newAssetOwner">
+                        <option value="" disabled selected>Owner</option>
+                        <option value="Joint">Joint</option>
+                        <option value="Alex">Alex</option>
+                        <option value="Rachel">Rachel</option>
+                        <option value="Eloise">Eloise</option>
+                    </select>
+                    <button onclick="addAsset()">Add</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="assetsTable">
+                        <thead><tr><th>Asset Details</th><th>Growth Breakdown</th><th>Actual Balance</th><th style="width: 40px;"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="totals-row" style="background: #F3FAFA; border:none;">
+                    <span style="color: var(--positive); font-family:'Outfit',sans-serif;">Total Assets:</span>
+                    <span id="totalAssets" class="positive">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="header-title"><span>📉</span> Liabilities</div>
+                <div class="toggle-icon">▼</div>
+            </div>
+            <div class="card-content collapsed">
+                <p style="font-size: 0.9rem; color: var(--text-light); margin-top:-10px;">Remaining Mortgage, Auto Loans, Credit Cards.</p>
+                <div class="input-group">
+                    <input type="text" id="newDebtName" placeholder="Debt Name">
+                    <input type="number" id="newDebtValue" placeholder="Starting Base ($)" step="0.01">
+                    <select id="newDebtOwner">
+                        <option value="" disabled selected>Owner</option>
+                        <option value="Joint">Joint</option>
+                        <option value="Alex">Alex</option>
+                        <option value="Rachel">Rachel</option>
+                        <option value="Eloise">Eloise</option>
+                    </select>
+                    <button onclick="addDebt()">Add</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="debtsTable">
+                        <thead><tr><th>Debt Details</th><th>Payoff Breakdown</th><th>Actual Balance</th><th style="width: 40px;"></th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="totals-row" style="background: #FFF5F3; border:none;">
+                    <span style="color: var(--negative); font-family:'Outfit',sans-serif;">Total Debts:</span>
+                    <span id="totalDebts" class="negative">$0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="net-worth">
+        <span>Household Net Worth</span> <br>
+        <span id="netWorthDisplay" style="font-size: 4rem; display: block; margin-top: 10px;">$0.00</span>
+    </div>
+</div>
+
+<script>
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    function getTodayString() {
+        return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function calculatePayPeriods() {
+        let year = parseInt(document.getElementById('configYear').value) || 2026;
+        let freq = document.getElementById('configFreq').value;
+        let baseDateStr = document.getElementById('configDate').value;
+        
+        let periods = [0,0,0,0,0,0,0,0,0,0,0,0];
+        
+        if (freq === 'monthly') return [1,1,1,1,1,1,1,1,1,1,1,1];
+        if (freq === 'semimonthly') return [2,2,2,2,2,2,2,2,2,2,2,2];
+        
+        if(!baseDateStr) baseDateStr = year + "-01-01";
+        let baseDate = new Date(baseDateStr + "T12:00:00"); 
+        let intervalDays = freq === 'biweekly' ? 14 : 7;
+        
+        let curr = new Date(baseDate.getTime());
+        while(curr.getFullYear() >= year) curr.setDate(curr.getDate() - intervalDays);
+        while(curr.getFullYear() < year) curr.setDate(curr.getDate() + intervalDays);
+        while(curr.getFullYear() === year) {
+            periods[curr.getMonth()] += 1;
+            curr.setDate(curr.getDate() + intervalDays);
+        }
+        return periods;
+    }
+
+    let appData = {
+        grossSalary: { alex: [72000, 72000, 72000, 72000, 72000, 75000, 75000, 75000, 75000, 75000, 75000, 75000], rachel: Array(12).fill(85000) },
+        surplusGoals: [],
+        budgetItems: [
+            { id: 101, Item: "Mortgage", values: Array(12).fill(1911.13), payDates: Array(12).fill("2026-05-01"), account: "Joint Chequing" },
+            { id: 102, Item: "Insurance", values: Array(12).fill(101.64), payDates: Array(12).fill("2026-05-15"), account: "Joint CC" }
+        ],
+        subscriptions: [
+            { id: 201, Thing: "Car Insurance", values: Array(12).fill(335.0), Payer: "Alex", account: "Alex CC", payDates: Array(12).fill("") }
+        ],
+        assets: [
+            { id: 301, name: "Joint Chequing", value: 5000, balances: Array(12).fill(5000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
+        ],
+        debts: [
+            { id: 401, name: "Joint CC", value: 2000, balances: Array(12).fill(2000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
+        ]
+    };
+
+    function toggleCard(headerEl) {
+        const content = headerEl.nextElementSibling;
+        const icon = headerEl.querySelector('.toggle-icon');
+        if (content.classList.contains('collapsed')) {
+            content.classList.remove('collapsed');
+            icon.style.transform = "rotate(0deg)";
+        } else {
+            content.classList.add('collapsed');
+            icon.style.transform = "rotate(-90deg)";
+        }
+    }
+
+    function formatMoney(amount) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount); }
+
+    function calculateOntarioTax(gross) {
+        if(!gross || gross <= 0) return { netAnnual: 0, netMonthly: 0, taxAnnual: 0, cppAnnual: 0, eiAnnual: 0 };
+        let fedTax = 0, gFed = gross;
+        if (gFed > 258482) { fedTax += (gFed - 258482) * 0.33; gFed = 258482; }
+        if (gFed > 181440) { fedTax += (gFed - 181440) * 0.29; gFed = 181440; }
+        if (gFed > 117045) { fedTax += (gFed - 117045) * 0.26; gFed = 117045; }
+        if (gFed > 58523) { fedTax += (gFed - 58523) * 0.205; gFed = 58523; }
+        if (gFed > 0) { fedTax += gFed * 0.14; }
+        fedTax -= 16452 * 0.14; if (fedTax < 0) fedTax = 0;
+
+        let ontTax = 0, gOnt = gross;
+        if (gOnt > 220000) { ontTax += (gOnt - 220000) * 0.1316; gOnt = 220000; }
+        if (gOnt > 150000) { ontTax += (gOnt - 150000) * 0.1216; gOnt = 150000; }
+        if (gOnt > 107785) { ontTax += (gOnt - 107785) * 0.1116; gOnt = 107785; }
+        if (gOnt > 53891) { ontTax += (gOnt - 53891) * 0.0915; gOnt = 53891; }
+        if (gOnt > 0) { ontTax += gOnt * 0.0505; }
+        ontTax -= 12989 * 0.0505; if (ontTax < 0) ontTax = 0;
+
+        let ohp = 0;
+        if (gross > 200000) ohp = 900; else if (gross > 72600) ohp = 750; else if (gross > 48000) ohp = 600; else if (gross > 38500) ohp = 450; else if (gross > 20000) ohp = 300;
+        ontTax += ohp;
+
+        let cppEarnings = Math.min(Math.max(gross - 3500, 0), 74600 - 3500);
+        let cpp = cppEarnings * 0.0595;
+        if (gross > 74600) { let cpp2Earnings = Math.min(gross - 74600, 85000 - 74600); cpp += cpp2Earnings * 0.04; }
+
+        let ei = Math.min(gross, 68900) * 0.0163;
+        let totalDeduct = fedTax + ontTax + cpp + ei;
+        let netAnnual = gross - totalDeduct;
+
+        return { netAnnual: netAnnual, netMonthly: netAnnual / 12, taxAnnual: fedTax + ontTax, cppAnnual: cpp, eiAnnual: ei };
+    }
+
+    function getAverage(arr) { return arr.reduce((a,b)=>a+b, 0) / 12; }
+    function getVariationNote(arr) { let changes = []; for(let i=1; i<12; i++) { if(arr[i] !== arr[i-1]) changes.push(shortMonths[i]); } if(changes.length > 0) return `<span class="variation-note">⚠️ Edits: ${changes.join(', ')}</span>`; return ""; }
+
+    function updateArray(arr, mIndex, newVal) {
+        let val = parseFloat(newVal) || 0;
+        if(mIndex === -1) { for(let i=0; i<12; i++) arr[i] = val; } 
+        else { let applyRest = document.getElementById("applyRest").checked; if(applyRest) { for(let i=mIndex; i<12; i++) arr[i] = val; } else { arr[mIndex] = val; } }
+    }
+
+    // Safely creates standard values array
+    function createTimeAwareArray(amount) {
+        let vals = Array(12).fill(0);
+        const viewIdx = parseInt(document.getElementById("monthSelector").value);
+        if (viewIdx === -1) { vals.fill(amount); } 
+        else { let applyRest = document.getElementById("applyRest").checked; if (applyRest) { for(let i=viewIdx; i<12; i++) vals[i] = amount; } else { vals[viewIdx] = amount; } }
+        return vals;
+    }
+
+    // Automatically guesses/pushes dates forward retaining the day of month
+    function createTimeAwareDateArray(dateStr) {
+        let vals = Array(12).fill('');
+        if (!dateStr) return vals;
+        const viewIdx = parseInt(document.getElementById("monthSelector").value);
+        let applyRest = document.getElementById("applyRest").checked;
+        let parts = dateStr.split('-');
+        if (parts.length !== 3) return vals;
+        let yr = parseInt(parts[0]); let day = parseInt(parts[2]);
+        let startIdx = (viewIdx === -1) ? 0 : viewIdx;
+        let endIdx = (viewIdx === -1 || applyRest) ? 12 : viewIdx + 1;
+        for(let i=startIdx; i<endIdx; i++) {
+            let mm = String(i+1).padStart(2, '0');
+            let dd = String(Math.min(day, new Date(yr, i+1, 0).getDate())).padStart(2, '0');
+            vals[i] = `${yr}-${mm}-${dd}`;
+        }
+        return vals;
+    }
+
+    function getAccountOptionsHTML(selectedValue) {
+        let options = `<option value="">-- Select Account --</option>`;
+        if (appData.assets.length > 0) {
+            options += `<optgroup label="Assets">`;
+            appData.assets.forEach(a => { let sel = (selectedValue === a.name) ? 'selected' : ''; options += `<option value="${a.name}" ${sel}>${a.name}</option>`; });
+            options += `</optgroup>`;
+        }
+        if (appData.debts.length > 0) {
+            options += `<optgroup label="Liabilities">`;
+            appData.debts.forEach(d => { let sel = (selectedValue === d.name) ? 'selected' : ''; options += `<option value="${d.name}" ${sel}>${d.name}</option>`; });
+            options += `</optgroup>`;
+        }
+        options += `<optgroup label="Other"><option value="Other" ${selectedValue === 'Other' ? 'selected' : ''}>Other / External</option></optgroup>`;
+        return options;
+    }
+
+    function updateCalculations() {
+        // Run migration for old dates to new Date Array framework natively
+        [appData.budgetItems, appData.subscriptions, appData.surplusGoals].forEach(list => {
+            list.forEach(item => {
+                if (item.payDay && !item.payDates) {
+                    let parts = item.payDay.split('-');
+                    let day = parts.length === 3 ? parseInt(parts[2]) : 1;
+                    let yr = parseInt(document.getElementById('configYear').value) || 2026;
+                    item.payDates = Array(12).fill('');
+                    for(let i=0; i<12; i++) {
+                        let mm = String(i+1).padStart(2, '0');
+                        let dd = String(Math.min(day, new Date(yr, i+1, 0).getDate())).padStart(2, '0');
+                        item.payDates[i] = `${yr}-${mm}-${dd}`;
+                    }
+                    delete item.payDay;
+                } else if (!item.payDates) {
+                    item.payDates = Array(12).fill('');
+                }
+            });
+        });
+
+        const accOptions = getAccountOptionsHTML('');
+        document.getElementById('newGoalAccount').innerHTML = accOptions;
+        document.getElementById('newBudgetAccount').innerHTML = accOptions;
+        document.getElementById('newSubAccount').innerHTML = accOptions;
+
+        const viewIdx = parseInt(document.getElementById("monthSelector").value);
+        const isYearView = viewIdx === -1;
+        const currentPayPeriods = calculatePayPeriods();
+        let paysInMonth = isYearView ? null : currentPayPeriods[viewIdx];
+        const freqType = document.getElementById("configFreq").value;
+        const annualPays = freqType === 'monthly' ? 12 : (freqType === 'semimonthly' ? 24 : (freqType === 'biweekly' ? 26 : 52));
+
+        let ytdGoalSums = {};
+        appData.surplusGoals.forEach(g => ytdGoalSums[g.name.trim().toLowerCase()] = 0);
+        let maxMonthCalc = isYearView ? 11 : viewIdx;
+        let today = new Date();
+
+        for (let i = 0; i <= maxMonthCalc; i++) {
+            let pMonth = currentPayPeriods[i];
+            let gA = appData.grossSalary.alex[i]; let gR = appData.grossSalary.rachel[i];
+            let tA = calculateOntarioTax(gA); let tR = calculateOntarioTax(gR);
+
+            let netA = (tA.netAnnual / annualPays) * pMonth; let netR = (tR.netAnnual / annualPays) * pMonth;
+            let actGrossA = (gA / annualPays) * pMonth; let actGrossR = (gR / annualPays) * pMonth;
+            let grossT = actGrossA + actGrossR;
+            let pA = grossT > 0 ? actGrossA / grossT : 0; let pR = grossT > 0 ? actGrossR / grossT : 0;
+
+            let bTotal = appData.budgetItems.reduce((sum, item) => sum + item.values[i], 0);
+            let aSubs = 0, rSubs = 0, jSubs = 0;
+            appData.subscriptions.forEach(sub => { if(sub.Payer === 'Alex') aSubs += sub.values[i]; else if(sub.Payer === 'Rachel') rSubs += sub.values[i]; else jSubs += sub.values[i]; });
+
+            let trueJ = bTotal + aSubs + rSubs + jSubs;
+            let aSurplus = netA - (trueJ * pA); let rSurplus = netR - (trueJ * pR);
+            let totSurplus = aSurplus + rSurplus;
+
+            appData.surplusGoals.forEach(g => {
+                let calcAmt = 0; let gVal = g.values ? g.values[i] : (g.value || 0);
+                if (g.type === 'percent') {
+                    if(g.owner === 'Joint') calcAmt = Math.max(0, totSurplus) * (gVal / 100); else if(g.owner === 'Alex') calcAmt = Math.max(0, aSurplus) * (gVal / 100); else if(g.owner === 'Rachel') calcAmt = Math.max(0, rSurplus) * (gVal / 100);
+                } else { calcAmt = gVal; }
+                
+                let nkey = g.name.trim().toLowerCase();
+                
+                let shouldCount = true;
+                let dateStr = g.payDates ? g.payDates[i] : null;
+                if (dateStr) {
+                    let parts = dateStr.split('-');
+                    if (parts.length === 3) {
+                        let dYear = parseInt(parts[0]);
+                        let dMonth = parseInt(parts[1]) - 1;
+                        let dDay = parseInt(parts[2]);
+                        let transferDate = new Date(dYear, dMonth, dDay, 23, 59, 59);
+                        if (transferDate > today) shouldCount = false;
+                    }
+                }
+
+                if (shouldCount && ytdGoalSums[nkey] !== undefined) ytdGoalSums[nkey] += calcAmt;
+            });
+        }
+
+        document.getElementById("applyRestContainer").style.display = isYearView ? "none" : "flex";
+        document.getElementById("salaryInstructions").innerText = isYearView 
+            ? "Showing Average Yearly equivalent. Editing here will overwrite the whole year." 
+            : `Editing Salary Rate for ${months[viewIdx]}. Check 'Apply Forward' to propagate changes forward.`;
+        
+        document.getElementById("netMonthlyLabel").innerText = isYearView ? "Average Net Monthly" : `Net Take-home (${months[viewIdx]} - ${paysInMonth} Pays)`;
+        document.getElementById("surplusTitle").innerText = isYearView ? "Average Monthly Surplus Planner" : `${months[viewIdx]} Surplus Planner (${paysInMonth} Pays)`;
+        document.getElementById("grossLabel").innerText = isYearView ? "Combined Gross Rate (Annualized)" : `Combined Gross (${paysInMonth} Pays)`;
+
+        let dispGrossAlexAnnual, dispGrossRachelAnnual, taxAlex, taxRachel;
+        let actualGrossAlex, actualGrossRachel;
+
+        if(isYearView) {
+            dispGrossAlexAnnual = getAverage(appData.grossSalary.alex); dispGrossRachelAnnual = getAverage(appData.grossSalary.rachel);
+            document.getElementById("grossAlex").value = dispGrossAlexAnnual.toFixed(2); document.getElementById("grossRachel").value = dispGrossRachelAnnual.toFixed(2);
+            
+            let totalNetA = 0, totalTaxA = 0, totalCPPA = 0, totalEIA = 0; let totalNetR = 0, totalTaxR = 0, totalCPPR = 0, totalEIR = 0;
+            for(let i=0; i<12; i++) {
+                let txA = calculateOntarioTax(appData.grossSalary.alex[i]); totalNetA += txA.netMonthly; totalTaxA += txA.taxAnnual/12; totalCPPA += txA.cppAnnual/12; totalEIA += txA.eiAnnual/12;
+                let txR = calculateOntarioTax(appData.grossSalary.rachel[i]); totalNetR += txR.netMonthly; totalTaxR += txR.taxAnnual/12; totalCPPR += txR.cppAnnual/12; totalEIR += txR.eiAnnual/12;
+            }
+            taxAlex = { netMonthly: totalNetA/12, taxAnnual: totalTaxA*12, cppAnnual: totalCPPA*12, eiAnnual: totalEIA*12 };
+            taxRachel = { netMonthly: totalNetR/12, taxAnnual: totalTaxR*12, cppAnnual: totalCPPR*12, eiAnnual: totalEIR*12 };
+
+            actualGrossAlex = dispGrossAlexAnnual / 12; actualGrossRachel = dispGrossRachelAnnual / 12;
+        } else {
+            dispGrossAlexAnnual = appData.grossSalary.alex[viewIdx]; dispGrossRachelAnnual = appData.grossSalary.rachel[viewIdx];
+            document.getElementById("grossAlex").value = dispGrossAlexAnnual.toFixed(2); document.getElementById("grossRachel").value = dispGrossRachelAnnual.toFixed(2);
+            
+            let taxA = calculateOntarioTax(dispGrossAlexAnnual); let taxR = calculateOntarioTax(dispGrossRachelAnnual);
+            taxAlex = { netMonthly: (taxA.netAnnual / annualPays) * paysInMonth, taxAnnual: taxA.taxAnnual, cppAnnual: taxA.cppAnnual, eiAnnual: taxA.eiAnnual };
+            taxRachel = { netMonthly: (taxR.netAnnual / annualPays) * paysInMonth, taxAnnual: taxR.taxAnnual, cppAnnual: taxR.cppAnnual, eiAnnual: taxR.eiAnnual };
+
+            actualGrossAlex = (dispGrossAlexAnnual / annualPays) * paysInMonth; actualGrossRachel = (dispGrossRachelAnnual / annualPays) * paysInMonth;
+        }
+
+        let pctAlex = 0, pctRachel = 0; const currentViewGrossTotal = actualGrossAlex + actualGrossRachel;
+        if(currentViewGrossTotal > 0) { pctAlex = actualGrossAlex / currentViewGrossTotal; pctRachel = actualGrossRachel / currentViewGrossTotal; }
+
+        document.getElementById("displayTotalGross").innerText = isYearView ? formatMoney(currentViewGrossTotal * 12) : formatMoney(currentViewGrossTotal);
+        document.getElementById("barAlex").style.width = `${pctAlex * 100}%`; document.getElementById("barAlex").innerText = `ALEX ${(pctAlex * 100).toFixed(0)}%`;
+        document.getElementById("barRachel").style.width = `${pctRachel * 100}%`; document.getElementById("barRachel").innerText = `RACHEL ${(pctRachel * 100).toFixed(0)}%`;
+
+        document.querySelectorAll('.splitAlexPct').forEach(el => el.innerText = (pctAlex * 100).toFixed(1));
+        document.querySelectorAll('.splitRachelPct').forEach(el => el.innerText = (pctRachel * 100).toFixed(1));
+
+        document.getElementById("noteAlex").innerHTML = isYearView ? getVariationNote(appData.grossSalary.alex) : ""; document.getElementById("noteRachel").innerHTML = isYearView ? getVariationNote(appData.grossSalary.rachel) : "";
+
+        let timeFrameLabel = isYearView ? "Monthly" : "This Month";
+        document.getElementById("taxAlex").innerHTML = `<b>Net ${timeFrameLabel}: <span class="positive">${formatMoney(taxAlex.netMonthly)}</span></b><br>Est. Income Tax Base: -${formatMoney(taxAlex.taxAnnual)}<br>Est. CPP/EI Base: -${formatMoney(taxAlex.cppAnnual + taxAlex.eiAnnual)}`;
+        document.getElementById("taxRachel").innerHTML = `<b>Net ${timeFrameLabel}: <span class="positive">${formatMoney(taxRachel.netMonthly)}</span></b><br>Est. Income Tax Base: -${formatMoney(taxRachel.taxAnnual)}<br>Est. CPP/EI Base: -${formatMoney(taxRachel.cppAnnual + taxRachel.eiAnnual)}`;
+
+        const totalNetMonthly = taxAlex.netMonthly + taxRachel.netMonthly; document.getElementById("displayTotalNetMonthly").innerText = formatMoney(totalNetMonthly);
+        document.getElementById("availAlex").innerText = formatMoney(taxAlex.netMonthly); document.getElementById("availRachel").innerText = formatMoney(taxRachel.netMonthly);
+
+        let alexSubsPaid = 0, rachelSubsPaid = 0, jointSubsPaid = 0;
+        const subsTbody = document.querySelector("#subsTable tbody"); subsTbody.innerHTML = "";
+        appData.subscriptions.forEach(item => {
+            let val = isYearView ? getAverage(item.values) : item.values[viewIdx];
+            if (val === 0) return; 
+
+            if(item.Payer === 'Alex') alexSubsPaid += val; else if(item.Payer === 'Rachel') rachelSubsPaid += val; else jointSubsPaid += val; 
+            
+            let note = isYearView ? getVariationNote(item.values) : "";
+            let dStr = isYearView ? item.payDates[0] : item.payDates[viewIdx];
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td data-label="Service Details" style="font-weight:700;">
+                    ${item.Thing}
+                    <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+                        <span style="font-size:0.8rem; opacity:0.7;" title="Payment Date">🗓️</span>
+                        <input type="date" value="${dStr || ''}" onchange="updateDate('subscriptions', ${item.id}, this.value)" class="meta-input" style="width:115px;">
+                        <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Card">💳</span>
+                        <select onchange="updateItemField('subscriptions', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
+                            ${getAccountOptionsHTML(item.account || '')}
+                        </select>
+                    </div>
+                </td>
+                <td data-label="Cost"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('subscriptions', ${item.id}, this.value, 'values')" class="inline-input"><br>${note}</td>
+                <td data-label="Payer"><span class="badge">${item.Payer}</span></td>
+                <td data-label="Action"><button class="danger" onclick="deleteItem('subscriptions', ${item.id})">✖</button></td>`;
+            subsTbody.appendChild(tr);
+        });
+
+        let totalBudget = 0; const budgetTbody = document.querySelector("#budgetTable tbody"); budgetTbody.innerHTML = "";
+        appData.budgetItems.forEach(item => {
+            let val = isYearView ? getAverage(item.values) : item.values[viewIdx];
+            if (val === 0) return; 
+
+            totalBudget += val; let note = isYearView ? getVariationNote(item.values) : "";
+            let dStr = isYearView ? item.payDates[0] : item.payDates[viewIdx];
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td data-label="Item Details" style="font-weight:700;">
+                    ${item.Item}
+                    <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+                        <span style="font-size:0.8rem; opacity:0.7;" title="Payment Date">🗓️</span>
+                        <input type="date" value="${dStr || ''}" onchange="updateDate('budgetItems', ${item.id}, this.value)" class="meta-input" style="width:115px;">
+                        <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Card">💳</span>
+                        <select onchange="updateItemField('budgetItems', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
+                            ${getAccountOptionsHTML(item.account || '')}
+                        </select>
+                    </div>
+                </td>
+                <td data-label="Cost"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('budgetItems', ${item.id}, this.value, 'values')" class="inline-input"><br>${note}</td>
+                <td data-label="Action"><button class="danger" onclick="deleteItem('budgetItems', ${item.id})">✖</button></td>`;
+            budgetTbody.appendChild(tr);
+        });
+        document.getElementById("totalBudgetDisplay").innerText = formatMoney(totalBudget);
+
+        const coreJointNeeds = totalBudget + jointSubsPaid;
+        const alexCoreShare = coreJointNeeds * pctAlex; const rachelCoreShare = coreJointNeeds * pctRachel;
+        const alexShareOfRachelSubs = rachelSubsPaid * pctAlex; const rachelShareOfAlexSubs = alexSubsPaid * pctRachel;
+
+        document.getElementById("coreShareAlex").innerText = "-" + formatMoney(alexCoreShare);
+        document.getElementById("alexShareOfRachelSubs").innerText = "-" + formatMoney(alexShareOfRachelSubs);
+        document.getElementById("rachelShareOfAlexSubs").innerText = "+" + formatMoney(rachelShareOfAlexSubs);
+        document.getElementById("transferAlex").innerText = formatMoney(alexCoreShare + alexShareOfRachelSubs - rachelShareOfAlexSubs);
+
+        document.getElementById("coreShareRachel").innerText = "-" + formatMoney(rachelCoreShare);
+        document.getElementById("rachelShareOfAlexSubs2").innerText = "-" + formatMoney(rachelShareOfAlexSubs);
+        document.getElementById("alexShareOfRachelSubs2").innerText = "+" + formatMoney(alexShareOfRachelSubs);
+        document.getElementById("transferRachel").innerText = formatMoney(rachelCoreShare + rachelShareOfAlexSubs - alexShareOfRachelSubs);
+
+        const trueTotalJointExpenses = totalBudget + alexSubsPaid + rachelSubsPaid + jointSubsPaid;
+        const alexSurplus = taxAlex.netMonthly - (trueTotalJointExpenses * pctAlex); const rachelSurplus = taxRachel.netMonthly - (trueTotalJointExpenses * pctRachel);
+        const totalSurplus = alexSurplus + rachelSurplus;
+
+        document.getElementById("totalSurplusDisplay").innerText = formatMoney(totalSurplus);
+
+        const totalDebtsRaw = appData.debts.reduce((sum, item) => sum + parseFloat(item.balances ? (isYearView ? item.balances[11] : item.balances[viewIdx]) : item.value || 0), 0);
+        const suggestionBox = document.getElementById("debtSuggestionBox");
+        if(totalDebtsRaw > 0 && totalSurplus > 0) { suggestionBox.innerHTML = `💡 <b>Smart Allocation:</b> You have <b>${formatMoney(totalDebtsRaw)}</b> in debt. Consider allocating <b>20%</b> of your surplus (${formatMoney(totalSurplus * 0.20)}) towards accelerated payoff!`; suggestionBox.style.display = "block"; } 
+        else suggestionBox.style.display = "none";
+
+        let totalAllocated = 0, jointAllocated = 0, alexAllocated = 0, rachelAllocated = 0;
+
+        appData.surplusGoals.forEach(g => {
+            if(!g.type) g.type = 'fixed'; if(!g.owner) g.owner = 'Joint'; if(!g.values) g.values = Array(12).fill(g.value || 0);
+            
+            let calcAmount = 0; let displayVal = isYearView ? getAverage(g.values) : g.values[viewIdx];
+            if (g.type === 'percent') { if(g.owner === 'Joint') calcAmount = Math.max(0, totalSurplus) * (displayVal / 100); else if(g.owner === 'Alex') calcAmount = Math.max(0, alexSurplus) * (displayVal / 100); else if(g.owner === 'Rachel') calcAmount = Math.max(0, rachelSurplus) * (displayVal / 100); } 
+            else calcAmount = displayVal;
+            
+            g.calculatedAmount = calcAmount;
+            if(g.owner === 'Joint') jointAllocated += calcAmount; else if(g.owner === 'Alex') alexAllocated += calcAmount; else if(g.owner === 'Rachel') rachelAllocated += calcAmount;
+            totalAllocated += calcAmount;
+        });
+
+        const alexGuiltFree = alexSurplus - (jointAllocated * pctAlex) - alexAllocated; const rachelGuiltFree = rachelSurplus - (jointAllocated * pctRachel) - rachelAllocated;
+        document.getElementById("alexSpendDisplay").innerText = formatMoney(alexGuiltFree); document.getElementById("alexSpendDisplay").style.color = alexGuiltFree >= 0 ? "var(--alex-color)" : "var(--negative)";
+        document.getElementById("rachelSpendDisplay").innerText = formatMoney(rachelGuiltFree); document.getElementById("rachelSpendDisplay").style.color = rachelGuiltFree >= 0 ? "#D49C1C" : "var(--negative)";
+
+        let allocPct = totalSurplus > 0 ? (totalAllocated / totalSurplus) * 100 : 0; if(allocPct > 100) allocPct = 100; if(allocPct < 0) allocPct = 0;
+        document.getElementById("barAllocated").style.width = `${allocPct}%`; document.getElementById("barAllocated").innerText = allocPct > 5 ? `ALLOCATED ${(allocPct).toFixed(0)}%` : '';
+        document.getElementById("barUnallocated").style.width = `${100 - allocPct}%`; document.getElementById("barUnallocated").innerText = (100 - allocPct) > 5 ? `UNALLOCATED ${(100-allocPct).toFixed(0)}%` : '';
+
+        const activeGoals = appData.surplusGoals.filter(item => { let val = isYearView ? getAverage(item.values) : item.values[viewIdx]; return val > 0; });
+        renderTable("surplusTable", activeGoals, item => {
+            let val = isYearView ? getAverage(item.values) : item.values[viewIdx]; let note = isYearView ? getVariationNote(item.values) : "";
+            let dStr = isYearView ? item.payDates[0] : item.payDates[viewIdx];
+            return `
+            <td data-label="Fund Goal & Details" style="font-weight:800; color:var(--primary); font-family:'Outfit',sans-serif; font-size:1.05rem;">
+                ${item.name}
+                <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+                    <span style="font-size:0.8rem; opacity:0.7;" title="Transfer Date">🗓️</span>
+                    <input type="date" value="${dStr || ''}" onchange="updateDate('surplusGoals', ${item.id}, this.value)" class="meta-input" style="width:115px;">
+                    <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Destination">💳</span>
+                    <select onchange="updateItemField('surplusGoals', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
+                        ${getAccountOptionsHTML(item.account || '')}
+                    </select>
+                </div>
+            </td>
+            <td data-label="Owner"><select onchange="updateGoalOwner(${item.id}, this.value)" style="padding:8px 12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); outline:none; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; font-size:0.9rem; font-weight:700; background:#FBF9F6;"><option value="Joint" ${item.owner === 'Joint' ? 'selected' : ''}>Joint</option><option value="Alex" ${item.owner === 'Alex' ? 'selected' : ''}>Alex</option><option value="Rachel" ${item.owner === 'Rachel' ? 'selected' : ''}>Rachel</option></select></td>
+            <td data-label="Allocation Strategy"><div style="display:flex; flex-direction:column; gap:5px;"><div style="display:flex; gap:8px; align-items:center;"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('surplusGoals', ${item.id}, this.value, 'values')" class="inline-input"><select onchange="updateGoalType(${item.id}, this.value)" style="padding:10px 15px; border-radius:12px; border:2px solid transparent; outline:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight: 600; cursor:pointer; background:#F0EFEA;"><option value="fixed" ${item.type === 'fixed' ? 'selected' : ''}>$ Fixed</option><option value="percent" ${item.type === 'percent' ? 'selected' : ''}>% ${item.owner === 'Joint' ? 'Total' : 'Personal'}</option></select></div>${note}<span style="color:var(--text-light); font-weight:800; font-size: 1rem; margin-top:5px;">= ${formatMoney(item.calculatedAmount)}</span></div></td>
+            <td data-label="Action"><button class="danger" onclick="deleteItem('surplusGoals', ${item.id})">✖</button></td>`
+        });
+
+        // ======================= ASSETS TABLE =======================
+        let totalAssetsDisplay = 0;
+        renderTable("assetsTable", appData.assets, item => {
+            if(!item.balances) item.balances = Array(12).fill(item.currentBalance !== undefined ? item.currentBalance : item.value);
+            if(!item.lumpSums) item.lumpSums = Array(12).fill(0);
+            
+            let baseVal = item.value;
+            let addedVal = ytdGoalSums[item.name.trim().toLowerCase()] || 0;
+            let currentBal = isYearView ? item.balances[11] : item.balances[viewIdx]; 
+            let lumpSumVal = isYearView ? item.lumpSums[11] : item.lumpSums[viewIdx]; 
+            
+            let growth = currentBal - baseVal - addedVal - lumpSumVal; 
+            totalAssetsDisplay += currentBal;
+
+            let dateLabel = item.date ? `<br><span style="font-size:0.75rem; color:var(--text-light); font-weight:600; opacity:0.8;">📅 Updated: ${item.date}</span>` : '';
+            
+            let breakdownString = `<div style="font-size:0.8rem; color:var(--text-light); font-weight:600; line-height: 1.5;">
+                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('assets', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">+ L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('assets', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="color:var(--positive); margin-top:4px;">+ YTD Alloc: ${formatMoney(addedVal)}</div>
+                <div style="color:${growth >= 0 ? 'var(--positive)' : 'var(--negative)'}; margin-top:4px;">${growth >= 0 ? '+' : ''} Interest: ${formatMoney(growth)}</div>
+            </div>`;
+
+            let valString = `<div style="display:flex; align-items:center; gap:5px;"><input type="number" value="${currentBal.toFixed(2)}" onchange="updateBalance('assets', ${item.id}, this.value)" class="inline-input" style="width:110px; padding:8px 12px; font-size:1.1rem; font-weight:800; color:var(--positive);"></div>`;
+
+            return `<td data-label="Asset Details" style="font-weight:700;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            ${item.name}
+                            <span class="badge" style="font-size:0.65rem; padding:3px 6px; border-radius:6px;">${item.owner}</span>
+                        </div>
+                        ${dateLabel}
+                    </td>
+                    <td data-label="Growth Breakdown">${breakdownString}</td>
+                    <td data-label="Actual Balance">${valString}</td>
+                    <td data-label="Action"><button class="danger" onclick="deleteItem('assets', ${item.id})">✖</button></td>`
+        });
+        
+        // ======================= DEBTS TABLE =======================
+        let totalDebts = 0;
+        renderTable("debtsTable", appData.debts, item => {
+            if(!item.balances) item.balances = Array(12).fill(item.currentBalance !== undefined ? item.currentBalance : item.value);
+            if(!item.lumpSums) item.lumpSums = Array(12).fill(0);
+
+            let baseVal = item.value;
+            let payoffVal = ytdGoalSums[item.name.trim().toLowerCase()] || 0;
+            let currentBal = isYearView ? item.balances[11] : item.balances[viewIdx];
+            let lumpSumVal = isYearView ? item.lumpSums[11] : item.lumpSums[viewIdx];
+
+            let interest = currentBal - (baseVal - payoffVal - lumpSumVal); 
+            totalDebts += currentBal;
+
+            let dateLabel = item.date ? `<br><span style="font-size:0.75rem; color:var(--text-light); font-weight:600; opacity:0.8;">📅 Updated: ${item.date}</span>` : '';
+            
+            let breakdownString = `<div style="font-size:0.8rem; color:var(--text-light); font-weight:600; line-height: 1.5;">
+                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('debts', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">- L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('debts', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="color:var(--positive); margin-top:4px;">- YTD Payoff: ${formatMoney(payoffVal)}</div>
+                <div style="color:var(--negative); margin-top:4px;">+ Interest: ${formatMoney(interest)}</div>
+            </div>`;
+
+            let valString = `<div style="display:flex; align-items:center; gap:5px;"><span class="negative" style="font-weight:800;">-</span><input type="number" value="${currentBal.toFixed(2)}" onchange="updateBalance('debts', ${item.id}, this.value)" class="inline-input" style="width:110px; padding:8px 12px; font-size:1.1rem; font-weight:800; color:var(--negative);"></div>`;
+
+            return `<td data-label="Debt Details" style="font-weight:700;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            ${item.name}
+                            <span class="badge" style="font-size:0.65rem; padding:3px 6px; border-radius:6px;">${item.owner}</span>
+                        </div>
+                        ${dateLabel}
+                    </td>
+                    <td data-label="Payoff Breakdown">${breakdownString}</td>
+                    <td data-label="Actual Balance">${valString}</td>
+                    <td data-label="Action"><button class="danger" onclick="deleteItem('debts', ${item.id})">✖</button></td>`
+        });
+
+        const netWorth = totalAssetsDisplay - totalDebts;
+        document.getElementById("totalAssets").innerText = formatMoney(totalAssetsDisplay);
+        document.getElementById("totalDebts").innerText = "-" + formatMoney(totalDebts);
+        const nwDisplay = document.getElementById("netWorthDisplay");
+        nwDisplay.innerText = formatMoney(netWorth);
+        nwDisplay.style.color = "white"; 
+    }
+
+    function renderTable(tableId, dataArray, rowHtmlFn) {
+        const tbody = document.querySelector(`#${tableId} tbody`); tbody.innerHTML = "";
+        dataArray.forEach(item => { const tr = document.createElement("tr"); tr.innerHTML = rowHtmlFn(item); tbody.appendChild(tr); });
+    }
+
+    function renderAll() { updateCalculations(); }
+
+    function updateSalary(person, val) { const viewIdx = parseInt(document.getElementById("monthSelector").value); updateArray(appData.grossSalary[person], viewIdx, val); renderAll(); }
+    
+    function updateRow(listName, id, val, arrayName = 'values') { const viewIdx = parseInt(document.getElementById("monthSelector").value); let item = appData[listName].find(i => i.id === id); if(item) { if(!item[arrayName]) item[arrayName] = Array(12).fill(item.value || 0); updateArray(item[arrayName], viewIdx, val); } renderAll(); }
+    
+    function updateDate(listName, id, newDateStr) {
+        const viewIdx = parseInt(document.getElementById("monthSelector").value);
+        let item = appData[listName].find(i => i.id === id);
+        if (!item || !item.payDates) return;
+        
+        if (viewIdx === -1) {
+            let parts = newDateStr.split('-');
+            if(parts.length === 3) {
+                let yr = parseInt(parts[0]); let day = parseInt(parts[2]);
+                for(let i=0; i<12; i++) {
+                    let mm = String(i+1).padStart(2, '0');
+                    let dd = String(Math.min(day, new Date(yr, i+1, 0).getDate())).padStart(2, '0');
+                    item.payDates[i] = `${yr}-${mm}-${dd}`;
+                }
+            }
+        } else {
+            item.payDates[viewIdx] = newDateStr;
+            let applyRest = document.getElementById("applyRest").checked;
+            if (applyRest && newDateStr) {
+                let parts = newDateStr.split('-');
+                if(parts.length === 3) {
+                    let yr = parseInt(parts[0]); let day = parseInt(parts[2]);
+                    for(let i=viewIdx+1; i<12; i++) {
+                        let mm = String(i+1).padStart(2, '0');
+                        let dd = String(Math.min(day, new Date(yr, i+1, 0).getDate())).padStart(2, '0');
+                        item.payDates[i] = `${yr}-${mm}-${dd}`;
+                    }
+                }
+            }
+        }
+        renderAll();
+    }
+
+    function updateGoalType(id, typeVal) { let item = appData.surplusGoals.find(i => i.id === id); if(item) item.type = typeVal; renderAll(); }
+    function updateGoalOwner(id, ownerVal) { let item = appData.surplusGoals.find(i => i.id === id); if(item) item.owner = ownerVal; renderAll(); }
+    function updateItemField(listName, id, field, val) { let item = appData[listName].find(i => i.id === id); if(item) { if (field === 'value') item[field] = Math.abs(parseFloat(val) || 0); else item[field] = val; } renderAll(); }
+    function updateBalance(listName, id, val) { let item = appData[listName].find(i => i.id === id); if(item) { item.date = getTodayString(); updateRow(listName, id, val, 'balances'); } }
+
+    function addBudget() { const name = document.getElementById("newBudgetName").value; const amount = Math.abs(parseFloat(document.getElementById("newBudgetAmount").value)); const dayStr = document.getElementById("newBudgetDay").value; const acc = document.getElementById("newBudgetAccount").value; if(!name || isNaN(amount)) return; appData.budgetItems.push({ id: Date.now(), Item: name, payDates: createTimeAwareDateArray(dayStr), account: acc, values: createTimeAwareArray(amount) }); document.getElementById("newBudgetName").value = ""; document.getElementById("newBudgetAmount").value = ""; document.getElementById("newBudgetDay").value = ""; document.getElementById("newBudgetAccount").value = ""; renderAll(); }
+    function addSurplusGoal() { const name = document.getElementById("newGoalName").value; const amount = Math.abs(parseFloat(document.getElementById("newGoalAmount").value)); const type = document.getElementById("newGoalType").value; const owner = document.getElementById("newGoalOwner").value; const dayStr = document.getElementById("newGoalDay").value; const acc = document.getElementById("newGoalAccount").value; if(!name || isNaN(amount)) return; appData.surplusGoals.push({ id: Date.now(), name: name, payDates: createTimeAwareDateArray(dayStr), account: acc, values: createTimeAwareArray(amount), type: type, owner: owner }); document.getElementById("newGoalName").value = ""; document.getElementById("newGoalAmount").value = ""; document.getElementById("newGoalDay").value = ""; document.getElementById("newGoalAccount").value = ""; renderAll(); }
+    function addSub() { const name = document.getElementById("newSubName").value; const price = Math.abs(parseFloat(document.getElementById("newSubPrice").value)); const payer = document.getElementById("newSubPayer").value; const dayStr = document.getElementById("newSubDay").value; const acc = document.getElementById("newSubAccount").value; if(!name || isNaN(price) || !payer) return; appData.subscriptions.push({ id: Date.now(), Thing: name, payDates: createTimeAwareDateArray(dayStr), account: acc, values: createTimeAwareArray(price), Payer: payer }); document.getElementById("newSubName").value = ""; document.getElementById("newSubPrice").value = ""; document.getElementById("newSubPayer").value = ""; document.getElementById("newSubDay").value = ""; document.getElementById("newSubAccount").value = ""; renderAll(); }
+    
+    function addAsset() { const name = document.getElementById("newAssetName").value; const val = Math.abs(parseFloat(document.getElementById("newAssetValue").value)); const owner = document.getElementById("newAssetOwner").value; if(!name || isNaN(val) || !owner) return; appData.assets.push({ id: Date.now(), name: name, value: val, balances: createTimeAwareArray(val), lumpSums: createTimeAwareArray(0), owner: owner, date: getTodayString() }); document.getElementById("newAssetName").value = ""; document.getElementById("newAssetValue").value = ""; document.getElementById("newAssetOwner").value = ""; renderAll(); }
+    function addDebt() { const name = document.getElementById("newDebtName").value; const val = Math.abs(parseFloat(document.getElementById("newDebtValue").value)); const owner = document.getElementById("newDebtOwner").value; if(!name || isNaN(val) || !owner) return; appData.debts.push({ id: Date.now(), name: name, value: val, balances: createTimeAwareArray(val), lumpSums: createTimeAwareArray(0), owner: owner, date: getTodayString() }); document.getElementById("newDebtName").value = ""; document.getElementById("newDebtValue").value = ""; document.getElementById("newDebtOwner").value = ""; renderAll(); }
+
+    function deleteItem(listName, id) { 
+        const viewIdx = parseInt(document.getElementById("monthSelector").value);
+        if (viewIdx === -1 || listName === 'assets' || listName === 'debts') {
+            appData[listName] = appData[listName].filter(item => item.id !== id); 
+        } else {
+            let item = appData[listName].find(i => i.id === id);
+            if (item && item.values) {
+                let applyRest = document.getElementById("applyRest").checked;
+                if (applyRest) { for(let i=viewIdx; i<12; i++) item.values[i] = 0; } else { item.values[viewIdx] = 0; }
+                let sum = item.values.reduce((a,b) => a + Math.abs(b), 0);
+                if (sum === 0) appData[listName] = appData[listName].filter(i => i.id !== id);
+            } else { appData[listName] = appData[listName].filter(item => item.id !== id); }
+        }
+        renderAll(); 
+    }
+
+    function downloadData() {
+        const blob = new Blob([JSON.stringify(appData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "family_finance_backup.json";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    function handleUpload(event) {
+        const file = event.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let uploadedData = JSON.parse(e.target.result);
+                if(uploadedData.budgetItems) {
+                    if(uploadedData.budgetItems.length > 0 && typeof uploadedData.budgetItems[0].Average !== 'undefined') {
+                        uploadedData.budgetItems.forEach(i => { i.values = Array(12).fill(i.Average); delete i.Average; });
+                        uploadedData.subscriptions.forEach(i => { i.values = Array(12).fill(i.Price); delete i.Price; });
+                        uploadedData.grossSalary.alex = Array(12).fill(uploadedData.grossSalary.alex);
+                        uploadedData.grossSalary.rachel = Array(12).fill(uploadedData.grossSalary.rachel);
+                    }
+                    if(uploadedData.surplusGoals) {
+                        uploadedData.surplusGoals.forEach(g => { if(!g.type) { g.type = 'fixed'; } if(!g.owner) { g.owner = 'Joint'; } if(!g.values) { g.values = Array(12).fill(g.value || g.amount || 0); } });
+                    }
+                    if(uploadedData.assets) {
+                        uploadedData.assets.forEach(a => { 
+                            if(!a.balances) a.balances = Array(12).fill(a.currentBalance !== undefined ? a.currentBalance : a.value); 
+                            if(!a.lumpSums) a.lumpSums = Array(12).fill(0);
+                        });
+                    }
+                    if(uploadedData.debts) {
+                        uploadedData.debts.forEach(d => { 
+                            if(!d.balances) d.balances = Array(12).fill(d.currentBalance !== undefined ? d.currentBalance : d.value); 
+                            if(!d.lumpSums) d.lumpSums = Array(12).fill(0);
+                        });
+                    }
+                    appData = uploadedData; renderAll(); alert("Data loaded successfully! ✨");
+                } else alert("Invalid file format.");
+            } catch (err) { alert("Error parsing file."); }
+        };
+        reader.readAsText(file); event.target.value = "";
+    }
+
+    async function backupToGoogleSheets() {
+        let sheetUrl = localStorage.getItem("sheetWebhookUrl");
+        if (!sheetUrl) {
+            sheetUrl = prompt("Enter your Google Apps Script Web App URL:\n(Check the instructions below the HTML snippet to set this up!)");
+            if (!sheetUrl) return;
+            localStorage.setItem("sheetWebhookUrl", sheetUrl);
+        }
+        const btn = document.getElementById('backupBtn'); const originalText = btn.innerHTML; btn.innerHTML = "⏳ Sending...";
+        try {
+            await fetch(sheetUrl, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ timestamp: new Date().toISOString(), data: appData }) });
+            alert("Backup sent to Google Sheets successfully! ☁️✨\n(Check your sheet for the new row)");
+        } catch (error) {
+            console.error("Backup failed", error); alert("Failed to backup. Make sure the Webhook URL is correct.");
+            if(confirm("Would you like to reset your Webhook URL?")) { localStorage.removeItem("sheetWebhookUrl"); }
+        } finally { btn.innerHTML = originalText; }
+    }
+
+    renderAll();
+</script>
+</body>
+</html>
