@@ -183,21 +183,33 @@
             .input-group input, .input-group select, .input-group button { width: 100%; max-width: 100%; box-sizing: border-box; margin-bottom: 10px; flex: none !important;}
             
             /* Hide standard table UI */
-            .table-responsive { overflow: hidden; border: none; background: transparent; }
+            .table-responsive { overflow: visible; border: none; background: transparent; }
             table, thead, tbody, th, td, tr { display: block; width: 100%; box-sizing: border-box; }
             thead { display: none; }
             
             /* Render Rows as Cards */
             tr { margin-bottom: 20px; background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); padding: 15px; box-shadow: var(--shadow-sm); }
             td { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); text-align: left; align-items: flex-start; word-break: break-word;}
-            td:last-child { border-bottom: none; padding-bottom: 0; align-items: center; justify-content: center; }
+            
+            /* Custom Action Footer Row Design */
+            td:last-child { 
+                border-bottom: none; 
+                padding-bottom: 0; 
+                flex-direction: row; 
+                justify-content: space-between; 
+                align-items: center; 
+                border-top: 1px solid rgba(0,0,0,0.05); 
+                margin-top: 10px; 
+                padding-top: 15px;
+            }
+            td:last-child::before {
+                margin-bottom: 0; 
+            }
             
             /* Inject Column Headers as Labels */
             td::before { content: attr(data-label); display: block; font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; font-family: 'Outfit', sans-serif;}
             
-            /* Force inputs to stretch beautifully inside mobile cards */
             td > div { width: 100%; }
-            .meta-input, .inline-input, select.meta-input { width: 100% !important; max-width: 100% !important; margin-bottom: 5px; box-sizing: border-box;}
             .badge { display: inline-block; margin-top: 5px;}
         }
     </style>
@@ -851,13 +863,17 @@
             tr.innerHTML = `
                 <td data-label="Service Details" style="font-weight:700;">
                     ${item.Thing}
-                    <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
-                        <span style="font-size:0.8rem; opacity:0.7;" title="Payment Date">🗓️</span>
-                        <input type="date" value="${dStr || ''}" onchange="updateDate('subscriptions', ${item.id}, this.value)" class="meta-input" style="width:115px;">
-                        <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Card">💳</span>
-                        <select onchange="updateItemField('subscriptions', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
-                            ${getAccountOptionsHTML(item.account || '')}
-                        </select>
+                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; font-weight:600;">
+                        <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                            <span style="font-size:0.85rem; opacity:0.7;" title="Payment Date">🗓️</span>
+                            <input type="date" value="${dStr || ''}" onchange="updateDate('subscriptions', ${item.id}, this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                            <span style="font-size:0.85rem; opacity:0.7;" title="Account / Card">💳</span>
+                            <select onchange="updateItemField('subscriptions', ${item.id}, 'account', this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                                ${getAccountOptionsHTML(item.account || '')}
+                            </select>
+                        </div>
                     </div>
                 </td>
                 <td data-label="Cost"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('subscriptions', ${item.id}, this.value, 'values')" class="inline-input"><br>${note}</td>
@@ -877,13 +893,17 @@
             tr.innerHTML = `
                 <td data-label="Item Details" style="font-weight:700;">
                     ${item.Item}
-                    <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
-                        <span style="font-size:0.8rem; opacity:0.7;" title="Payment Date">🗓️</span>
-                        <input type="date" value="${dStr || ''}" onchange="updateDate('budgetItems', ${item.id}, this.value)" class="meta-input" style="width:115px;">
-                        <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Card">💳</span>
-                        <select onchange="updateItemField('budgetItems', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
-                            ${getAccountOptionsHTML(item.account || '')}
-                        </select>
+                    <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; font-weight:600;">
+                        <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                            <span style="font-size:0.85rem; opacity:0.7;" title="Payment Date">🗓️</span>
+                            <input type="date" value="${dStr || ''}" onchange="updateDate('budgetItems', ${item.id}, this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                            <span style="font-size:0.85rem; opacity:0.7;" title="Account / Card">💳</span>
+                            <select onchange="updateItemField('budgetItems', ${item.id}, 'account', this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                                ${getAccountOptionsHTML(item.account || '')}
+                            </select>
+                        </div>
                     </div>
                 </td>
                 <td data-label="Cost"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('budgetItems', ${item.id}, this.value, 'values')" class="inline-input"><br>${note}</td>
@@ -946,17 +966,21 @@
             return `
             <td data-label="Fund Goal & Details" style="font-weight:800; color:var(--primary); font-family:'Outfit',sans-serif; font-size:1.05rem;">
                 ${item.name}
-                <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap;">
-                    <span style="font-size:0.8rem; opacity:0.7;" title="Transfer Date">🗓️</span>
-                    <input type="date" value="${dStr || ''}" onchange="updateDate('surplusGoals', ${item.id}, this.value)" class="meta-input" style="width:115px;">
-                    <span style="font-size:0.8rem; opacity:0.7; margin-left:5px;" title="Account / Destination">💳</span>
-                    <select onchange="updateItemField('surplusGoals', ${item.id}, 'account', this.value)" class="meta-input" style="width:125px;">
-                        ${getAccountOptionsHTML(item.account || '')}
-                    </select>
+                <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; font-size:0.9rem; color:var(--text-main);">
+                    <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                        <span style="font-size:0.85rem; opacity:0.7;" title="Transfer Date">🗓️</span>
+                        <input type="date" value="${dStr || ''}" onchange="updateDate('surplusGoals', ${item.id}, this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:130px;">
+                        <span style="font-size:0.85rem; opacity:0.7;" title="Account / Destination">💳</span>
+                        <select onchange="updateItemField('surplusGoals', ${item.id}, 'account', this.value)" class="meta-input" style="flex:1; width:100%; margin:0; min-height:32px;">
+                            ${getAccountOptionsHTML(item.account || '')}
+                        </select>
+                    </div>
                 </div>
             </td>
-            <td data-label="Owner"><select onchange="updateGoalOwner(${item.id}, this.value)" style="padding:8px 12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); outline:none; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; font-size:0.9rem; font-weight:700; background:#FBF9F6;"><option value="Joint" ${item.owner === 'Joint' ? 'selected' : ''}>Joint</option><option value="Alex" ${item.owner === 'Alex' ? 'selected' : ''}>Alex</option><option value="Rachel" ${item.owner === 'Rachel' ? 'selected' : ''}>Rachel</option></select></td>
-            <td data-label="Allocation Strategy"><div style="display:flex; flex-direction:column; gap:5px;"><div style="display:flex; gap:8px; align-items:center;"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('surplusGoals', ${item.id}, this.value, 'values')" class="inline-input"><select onchange="updateGoalType(${item.id}, this.value)" style="padding:10px 15px; border-radius:12px; border:2px solid transparent; outline:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight: 600; cursor:pointer; background:#F0EFEA;"><option value="fixed" ${item.type === 'fixed' ? 'selected' : ''}>$ Fixed</option><option value="percent" ${item.type === 'percent' ? 'selected' : ''}>% ${item.owner === 'Joint' ? 'Total' : 'Personal'}</option></select></div>${note}<span style="color:var(--text-light); font-weight:800; font-size: 1rem; margin-top:5px;">= ${formatMoney(item.calculatedAmount)}</span></div></td>
+            <td data-label="Owner"><select onchange="updateGoalOwner(${item.id}, this.value)" style="padding:8px 12px; border-radius:12px; border:1px solid rgba(0,0,0,0.1); outline:none; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; font-size:0.9rem; font-weight:700; background:#FBF9F6; width:100%; max-width:200px;"><option value="Joint" ${item.owner === 'Joint' ? 'selected' : ''}>Joint</option><option value="Alex" ${item.owner === 'Alex' ? 'selected' : ''}>Alex</option><option value="Rachel" ${item.owner === 'Rachel' ? 'selected' : ''}>Rachel</option></select></td>
+            <td data-label="Allocation Strategy"><div style="display:flex; flex-direction:column; gap:5px;"><div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;"><input type="number" value="${val.toFixed(2)}" onchange="updateRow('surplusGoals', ${item.id}, this.value, 'values')" class="inline-input" style="flex:1; min-width:80px;"><select onchange="updateGoalType(${item.id}, this.value)" style="padding:10px 15px; border-radius:12px; border:2px solid transparent; outline:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight: 600; cursor:pointer; background:#F0EFEA; flex:2; min-width:120px;"><option value="fixed" ${item.type === 'fixed' ? 'selected' : ''}>$ Fixed</option><option value="percent" ${item.type === 'percent' ? 'selected' : ''}>% ${item.owner === 'Joint' ? 'Total' : 'Personal'}</option></select></div>${note}<span style="color:var(--text-light); font-weight:800; font-size: 1rem; margin-top:5px;">= ${formatMoney(item.calculatedAmount)}</span></div></td>
             <td data-label="Action"><button class="danger" onclick="deleteItem('surplusGoals', ${item.id})">✖</button></td>`
         });
 
@@ -977,8 +1001,8 @@
             let dateLabel = item.date ? `<br><span style="font-size:0.75rem; color:var(--text-light); font-weight:600; opacity:0.8;">📅 Updated: ${item.date}</span>` : '';
             
             let breakdownString = `<div style="font-size:0.8rem; color:var(--text-light); font-weight:600; line-height: 1.5;">
-                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('assets', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px;"></div>
-                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">+ L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('assets', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('assets', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px; margin:0;"></div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">+ L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('assets', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px; margin:0;"></div>
                 <div style="color:var(--positive); margin-top:4px;">+ YTD Alloc: ${formatMoney(addedVal)}</div>
                 <div style="color:${growth >= 0 ? 'var(--positive)' : 'var(--negative)'}; margin-top:4px;">${growth >= 0 ? '+' : ''} Interest: ${formatMoney(growth)}</div>
             </div>`;
@@ -1014,8 +1038,8 @@
             let dateLabel = item.date ? `<br><span style="font-size:0.75rem; color:var(--text-light); font-weight:600; opacity:0.8;">📅 Updated: ${item.date}</span>` : '';
             
             let breakdownString = `<div style="font-size:0.8rem; color:var(--text-light); font-weight:600; line-height: 1.5;">
-                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('debts', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px;"></div>
-                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">- L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('debts', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px;"></div>
+                <div style="display:flex; align-items:center; gap:5px;">Base: <input type="number" value="${baseVal.toFixed(2)}" onchange="updateItemField('debts', ${item.id}, 'value', this.value)" class="meta-input" style="width:65px; padding:2px 6px; margin:0;"></div>
+                <div style="display:flex; align-items:center; gap:5px; margin-top:4px; color:var(--positive);">- L.Sum: <input type="number" value="${lumpSumVal.toFixed(2)}" onchange="updateRow('debts', ${item.id}, this.value, 'lumpSums')" class="meta-input" style="width:65px; padding:2px 6px; margin:0;"></div>
                 <div style="color:var(--positive); margin-top:4px;">- YTD Payoff: ${formatMoney(payoffVal)}</div>
                 <div style="color:var(--negative); margin-top:4px;">+ Interest: ${formatMoney(interest)}</div>
             </div>`;
