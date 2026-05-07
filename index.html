@@ -3,10 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finance Hub">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#FDFBF7">
+    
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23D46A54%22/><text y=%22.9em%22 x=%22.1em%22 font-size=%2280%22>✨</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+
     <title>Family Finance Hub</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23D46A54'/%3E%3Cstop offset='100%25' stop-color='%23E76F51'/%3E%3C/linearGradient%3E%3ClinearGradient id='m1Grad' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%2343B5AE'/%3E%3Cstop offset='100%25' stop-color='%232F9C95'/%3E%3C/linearGradient%3E%3ClinearGradient id='m2Grad' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%23FAD674'/%3E%3Cstop offset='100%25' stop-color='%23F2C14E'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='115' fill='url(%23bgGrad)'/%3E%3Cpath d='M 110 330 L 110 200 L 175 270 L 240 200 L 240 330' fill='none' stroke='url(%23m1Grad)' stroke-width='44' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 272 330 L 272 200 L 337 270 L 402 200 L 402 120' fill='none' stroke='url(%23m2Grad)' stroke-width='44' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 352 160 L 402 100 L 452 160' fill='none' stroke='url(%23m2Grad)' stroke-width='44' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cg transform='translate(256, 420) scale(0.65)' fill='%23FFFFFF' opacity='0.95'%3E%3Cpath d='M 0,-15 C -25,-15 -35,5 -25,25 C -15,45 15,45 25,25 C 35,5 25,-15 0,-15 Z' /%3E%3Ccircle cx='-35' cy='-25' r='14' /%3E%3Ccircle cx='-12' cy='-45' r='14' /%3E%3Ccircle cx='12' cy='-45' r='14' /%3E%3Ccircle cx='35' cy='-25' r='14' /%3E%3C/g%3E%3Cpath d='M 120 70 Q 120 100 90 100 Q 120 100 120 130 Q 120 100 150 100 Q 120 100 120 70 Z' fill='%23FFFFFF' opacity='0.85'/%3E%3C/svg%3E">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        /* Universal Box Sizing to prevent horizontal overflow */
+        *, *::before, *::after { box-sizing: border-box; }
 
         :root {
             --primary: #D46A54;       
@@ -44,7 +56,7 @@
 
         h1, h2, h3, h4, .header-title { font-family: 'Outfit', sans-serif; margin-top: 0; }
         
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; width: 100%; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 20px 35px; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,0.5); flex-wrap: wrap; gap: 15px; }
         h1 { font-weight: 800; font-size: 2.2rem; margin: 0; color: var(--primary); letter-spacing: -0.5px;}
@@ -139,12 +151,33 @@
         /* ✨ MAGIC MOBILE CARD LAYOUT (No Horizontal Scrolling) ✨ */
         @media (max-width: 768px) {
             body { padding: 15px 10px; }
-            .header { padding: 20px; flex-direction: column; align-items: stretch; text-align: center; border-radius: 20px; }
+            .header { padding: 20px 15px; flex-direction: column; align-items: stretch; text-align: center; border-radius: 20px; }
+            h1 { font-size: 1.8rem; } /* Prevent header overflow */
+            
             .controls { flex-direction: column; width: 100%; }
             .controls button, .file-upload-wrapper button { width: 100%; }
             .time-controls { flex-direction: column; width: 100%; max-width: 100%; box-sizing: border-box; }
+            
+            /* Stack schedule configuration */
+            .schedule-config { flex-direction: column; align-items: stretch; padding: 20px 15px; gap: 15px; }
+            .schedule-config label { width: 100%; }
+            .schedule-config select, .schedule-config input { width: 100%; box-sizing: border-box; }
+            
             .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 20px; }
-            .card { padding: 20px; }
+            .card { padding: 20px 15px; }
+            
+            /* Handle massive fonts blowing out containers */
+            .stat-box strong, #displayTotalNetMonthly { font-size: 1.8rem !important; }
+            #netWorthDisplay { font-size: 2.5rem !important; }
+            .net-worth { padding: 30px 15px; }
+            
+            /* Prevent transfer cards line cutoff */
+            .transfer-card { padding: 20px 15px; }
+            .transfer-card > div:last-child { padding: 12px; }
+            .transfer-card > div:last-child > div { flex-wrap: wrap; gap: 5px; } /* Ensures long item labels wrap downwards */
+            
+            /* Totals bars wrapping */
+            .totals-row { flex-direction: column; gap: 10px; text-align: center; }
             
             .input-group { flex-direction: column; align-items: stretch; padding: 20px 15px; }
             .input-group input, .input-group select, .input-group button { width: 100%; max-width: 100%; box-sizing: border-box; margin-bottom: 10px; flex: none !important;}
@@ -156,7 +189,7 @@
             
             /* Render Rows as Cards */
             tr { margin-bottom: 20px; background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); padding: 15px; box-shadow: var(--shadow-sm); }
-            td { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); text-align: left; align-items: flex-start;}
+            td { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); text-align: left; align-items: flex-start; word-break: break-word;}
             td:last-child { border-bottom: none; padding-bottom: 0; align-items: center; justify-content: center; }
             
             /* Inject Column Headers as Labels */
@@ -504,6 +537,8 @@
 </div>
 
 <script>
+    const LOCAL_STORAGE_KEY = 'familyFinanceHubData';
+
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
@@ -535,23 +570,36 @@
         return periods;
     }
 
+    // Completely Blank State
     let appData = {
-        grossSalary: { alex: [72000, 72000, 72000, 72000, 72000, 75000, 75000, 75000, 75000, 75000, 75000, 75000], rachel: Array(12).fill(85000) },
+        grossSalary: { alex: Array(12).fill(0), rachel: Array(12).fill(0) },
         surplusGoals: [],
-        budgetItems: [
-            { id: 101, Item: "Mortgage", values: Array(12).fill(1911.13), payDates: Array(12).fill("2026-05-01"), account: "Joint Chequing" },
-            { id: 102, Item: "Insurance", values: Array(12).fill(101.64), payDates: Array(12).fill("2026-05-15"), account: "Joint CC" }
-        ],
-        subscriptions: [
-            { id: 201, Thing: "Car Insurance", values: Array(12).fill(335.0), Payer: "Alex", account: "Alex CC", payDates: Array(12).fill("") }
-        ],
-        assets: [
-            { id: 301, name: "Joint Chequing", value: 5000, balances: Array(12).fill(5000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
-        ],
-        debts: [
-            { id: 401, name: "Joint CC", value: 2000, balances: Array(12).fill(2000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
-        ]
+        budgetItems: [],
+        subscriptions: [],
+        assets: [],
+        debts: []
     };
+
+    function loadFromLocalStorage() {
+        const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedData) {
+            try {
+                let parsed = JSON.parse(savedData);
+                if (parsed.grossSalary) appData.grossSalary = parsed.grossSalary;
+                if (parsed.surplusGoals) appData.surplusGoals = parsed.surplusGoals;
+                if (parsed.budgetItems) appData.budgetItems = parsed.budgetItems;
+                if (parsed.subscriptions) appData.subscriptions = parsed.subscriptions;
+                if (parsed.assets) appData.assets = parsed.assets;
+                if (parsed.debts) appData.debts = parsed.debts;
+            } catch (e) {
+                console.error("Failed to load local data", e);
+            }
+        }
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appData));
+    }
 
     function toggleCard(headerEl) {
         const content = headerEl.nextElementSibling;
@@ -992,6 +1040,9 @@
         const nwDisplay = document.getElementById("netWorthDisplay");
         nwDisplay.innerText = formatMoney(netWorth);
         nwDisplay.style.color = "white"; 
+        
+        // Save to Local Storage anytime calculations update
+        saveToLocalStorage();
     }
 
     function renderTable(tableId, dataArray, rowHtmlFn) {
@@ -1124,6 +1175,8 @@
         } finally { btn.innerHTML = originalText; }
     }
 
+    // Initialize the app by pulling saved local data (if any), then rendering
+    loadFromLocalStorage();
     renderAll();
 </script>
 </body>
