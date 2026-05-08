@@ -152,13 +152,12 @@
         @media (max-width: 768px) {
             body { padding: 15px 10px; }
             .header { padding: 20px 15px; flex-direction: column; align-items: stretch; text-align: center; border-radius: 20px; }
-            h1 { font-size: 1.8rem; } /* Prevent header overflow */
+            h1 { font-size: 1.8rem; } 
             
             .controls { flex-direction: column; width: 100%; }
             .controls button, .file-upload-wrapper button { width: 100%; }
             .time-controls { flex-direction: column; width: 100%; max-width: 100%; box-sizing: border-box; }
             
-            /* Stack schedule configuration */
             .schedule-config { flex-direction: column; align-items: stretch; padding: 20px 15px; gap: 15px; }
             .schedule-config label { width: 100%; }
             .schedule-config select, .schedule-config input { width: 100%; box-sizing: border-box; }
@@ -166,32 +165,26 @@
             .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 20px; }
             .card { padding: 20px 15px; }
             
-            /* Handle massive fonts blowing out containers */
             .stat-box strong, #displayTotalNetMonthly { font-size: 1.8rem !important; }
             #netWorthDisplay { font-size: 2.5rem !important; }
             .net-worth { padding: 30px 15px; }
             
-            /* Prevent transfer cards line cutoff */
             .transfer-card { padding: 20px 15px; }
             .transfer-card > div:last-child { padding: 12px; }
-            .transfer-card > div:last-child > div { flex-wrap: wrap; gap: 5px; } /* Ensures long item labels wrap downwards */
+            .transfer-card > div:last-child > div { flex-wrap: wrap; gap: 5px; } 
             
-            /* Totals bars wrapping */
             .totals-row { flex-direction: column; gap: 10px; text-align: center; }
             
             .input-group { flex-direction: column; align-items: stretch; padding: 20px 15px; }
             .input-group input, .input-group select, .input-group button { width: 100%; max-width: 100%; box-sizing: border-box; margin-bottom: 10px; flex: none !important;}
             
-            /* Hide standard table UI */
             .table-responsive { overflow: visible; border: none; background: transparent; }
             table, thead, tbody, th, td, tr { display: block; width: 100%; box-sizing: border-box; }
             thead { display: none; }
             
-            /* Render Rows as Cards */
             tr { margin-bottom: 20px; background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); padding: 15px; box-shadow: var(--shadow-sm); }
             td { display: flex; flex-direction: column; padding: 12px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); text-align: left; align-items: flex-start; word-break: break-word;}
             
-            /* Custom Action Footer Row Design */
             td:last-child { 
                 border-bottom: none; 
                 padding-bottom: 0; 
@@ -206,7 +199,6 @@
                 margin-bottom: 0; 
             }
             
-            /* Inject Column Headers as Labels */
             td::before { content: attr(data-label); display: block; font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; font-family: 'Outfit', sans-serif;}
             
             td > div { width: 100%; }
@@ -244,10 +236,10 @@
         </div>
 
         <div class="controls">
-            <button id="backupBtn" class="btn-sheet" onclick="backupToGoogleSheets()">☁️ Backup to Sheets</button>
-            <button onclick="downloadData()" style="background: var(--accent-yellow); color: #7A5C13; box-shadow: 0 6px 15px rgba(242, 193, 78, 0.3);">💾 Save File</button>
+            <button id="syncBtn" class="btn-sheet" onclick="syncToCloud()">☁️ Sync to Cloud</button>
+            <button onclick="downloadData()" style="background: var(--accent-yellow); color: #7A5C13; box-shadow: 0 6px 15px rgba(242, 193, 78, 0.3);">💾 Save Backup</button>
             <div class="file-upload-wrapper">
-                <button style="background: #E8E5DF; color: var(--text-main); box-shadow: none;">📂 Load File</button>
+                <button style="background: #E8E5DF; color: var(--text-main); box-shadow: none;">📂 Load Backup</button>
                 <input type="file" id="uploadInput" accept=".json" onchange="handleUpload(event)">
             </div>
         </div>
@@ -549,8 +541,6 @@
 </div>
 
 <script>
-    const LOCAL_STORAGE_KEY = 'familyFinanceHubData';
-
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
@@ -582,36 +572,23 @@
         return periods;
     }
 
-    // Completely Blank State
     let appData = {
-        grossSalary: { alex: Array(12).fill(0), rachel: Array(12).fill(0) },
+        grossSalary: { alex: [72000, 72000, 72000, 72000, 72000, 75000, 75000, 75000, 75000, 75000, 75000, 75000], rachel: Array(12).fill(85000) },
         surplusGoals: [],
-        budgetItems: [],
-        subscriptions: [],
-        assets: [],
-        debts: []
+        budgetItems: [
+            { id: 101, Item: "Mortgage", values: Array(12).fill(1911.13), payDates: Array(12).fill("2026-05-01"), account: "Joint Chequing" },
+            { id: 102, Item: "Insurance", values: Array(12).fill(101.64), payDates: Array(12).fill("2026-05-15"), account: "Joint CC" }
+        ],
+        subscriptions: [
+            { id: 201, Thing: "Car Insurance", values: Array(12).fill(335.0), Payer: "Alex", account: "Alex CC", payDates: Array(12).fill("") }
+        ],
+        assets: [
+            { id: 301, name: "Joint Chequing", value: 5000, balances: Array(12).fill(5000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
+        ],
+        debts: [
+            { id: 401, name: "Joint CC", value: 2000, balances: Array(12).fill(2000), lumpSums: Array(12).fill(0), owner: "Joint", date: getTodayString() }
+        ]
     };
-
-    function loadFromLocalStorage() {
-        const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedData) {
-            try {
-                let parsed = JSON.parse(savedData);
-                if (parsed.grossSalary) appData.grossSalary = parsed.grossSalary;
-                if (parsed.surplusGoals) appData.surplusGoals = parsed.surplusGoals;
-                if (parsed.budgetItems) appData.budgetItems = parsed.budgetItems;
-                if (parsed.subscriptions) appData.subscriptions = parsed.subscriptions;
-                if (parsed.assets) appData.assets = parsed.assets;
-                if (parsed.debts) appData.debts = parsed.debts;
-            } catch (e) {
-                console.error("Failed to load local data", e);
-            }
-        }
-    }
-
-    function saveToLocalStorage() {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appData));
-    }
 
     function toggleCard(headerEl) {
         const content = headerEl.nextElementSibling;
@@ -669,7 +646,6 @@
         else { let applyRest = document.getElementById("applyRest").checked; if(applyRest) { for(let i=mIndex; i<12; i++) arr[i] = val; } else { arr[mIndex] = val; } }
     }
 
-    // Safely creates standard values array
     function createTimeAwareArray(amount) {
         let vals = Array(12).fill(0);
         const viewIdx = parseInt(document.getElementById("monthSelector").value);
@@ -678,7 +654,6 @@
         return vals;
     }
 
-    // Automatically guesses/pushes dates forward retaining the day of month
     function createTimeAwareDateArray(dateStr) {
         let vals = Array(12).fill('');
         if (!dateStr) return vals;
@@ -714,7 +689,6 @@
     }
 
     function updateCalculations() {
-        // Run migration for old dates to new Date Array framework natively
         [appData.budgetItems, appData.subscriptions, appData.surplusGoals].forEach(list => {
             list.forEach(item => {
                 if (item.payDay && !item.payDates) {
@@ -1064,9 +1038,6 @@
         const nwDisplay = document.getElementById("netWorthDisplay");
         nwDisplay.innerText = formatMoney(netWorth);
         nwDisplay.style.color = "white"; 
-        
-        // Save to Local Storage anytime calculations update
-        saveToLocalStorage();
     }
 
     function renderTable(tableId, dataArray, rowHtmlFn) {
@@ -1154,27 +1125,6 @@
             try {
                 let uploadedData = JSON.parse(e.target.result);
                 if(uploadedData.budgetItems) {
-                    if(uploadedData.budgetItems.length > 0 && typeof uploadedData.budgetItems[0].Average !== 'undefined') {
-                        uploadedData.budgetItems.forEach(i => { i.values = Array(12).fill(i.Average); delete i.Average; });
-                        uploadedData.subscriptions.forEach(i => { i.values = Array(12).fill(i.Price); delete i.Price; });
-                        uploadedData.grossSalary.alex = Array(12).fill(uploadedData.grossSalary.alex);
-                        uploadedData.grossSalary.rachel = Array(12).fill(uploadedData.grossSalary.rachel);
-                    }
-                    if(uploadedData.surplusGoals) {
-                        uploadedData.surplusGoals.forEach(g => { if(!g.type) { g.type = 'fixed'; } if(!g.owner) { g.owner = 'Joint'; } if(!g.values) { g.values = Array(12).fill(g.value || g.amount || 0); } });
-                    }
-                    if(uploadedData.assets) {
-                        uploadedData.assets.forEach(a => { 
-                            if(!a.balances) a.balances = Array(12).fill(a.currentBalance !== undefined ? a.currentBalance : a.value); 
-                            if(!a.lumpSums) a.lumpSums = Array(12).fill(0);
-                        });
-                    }
-                    if(uploadedData.debts) {
-                        uploadedData.debts.forEach(d => { 
-                            if(!d.balances) d.balances = Array(12).fill(d.currentBalance !== undefined ? d.currentBalance : d.value); 
-                            if(!d.lumpSums) d.lumpSums = Array(12).fill(0);
-                        });
-                    }
                     appData = uploadedData; renderAll(); alert("Data loaded successfully! ✨");
                 } else alert("Invalid file format.");
             } catch (err) { alert("Error parsing file."); }
@@ -1182,26 +1132,68 @@
         reader.readAsText(file); event.target.value = "";
     }
 
-    async function backupToGoogleSheets() {
+    // --- NEW CLOUD SYNC FUNCTIONS ---
+
+    async function loadFromCloud() {
         let sheetUrl = localStorage.getItem("sheetWebhookUrl");
         if (!sheetUrl) {
-            sheetUrl = prompt("Enter your Google Apps Script Web App URL:\n(Check the instructions below the HTML snippet to set this up!)");
+            renderAll(); // Fallback to starting data
+            return;
+        }
+        
+        const btn = document.getElementById('syncBtn');
+        if(btn) btn.innerHTML = "⏳ Loading Data...";
+        
+        try {
+            let response = await fetch(sheetUrl);
+            let cloudData = await response.json();
+            
+            // Ensure we actually got data back and not an empty sheet
+            if (cloudData && !cloudData.status) { 
+                appData = cloudData;
+                console.log("Loaded fresh data from Google Sheets.");
+            }
+        } catch (error) {
+            console.error("Failed to load from cloud", error);
+        } finally {
+            if(btn) btn.innerHTML = "☁️ Sync to Cloud";
+            renderAll();
+        }
+    }
+
+    async function syncToCloud() {
+        let sheetUrl = localStorage.getItem("sheetWebhookUrl");
+        if (!sheetUrl) {
+            sheetUrl = prompt("Enter your Google Apps Script Web App URL:");
             if (!sheetUrl) return;
             localStorage.setItem("sheetWebhookUrl", sheetUrl);
         }
-        const btn = document.getElementById('backupBtn'); const originalText = btn.innerHTML; btn.innerHTML = "⏳ Sending...";
+        
+        const btn = document.getElementById('syncBtn'); 
+        const originalText = btn.innerHTML; 
+        btn.innerHTML = "⏳ Saving...";
+        
         try {
-            await fetch(sheetUrl, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ timestamp: new Date().toISOString(), data: appData }) });
-            alert("Backup sent to Google Sheets successfully! ☁️✨\n(Check your sheet for the new row)");
+            // Using text/plain is a browser trick to bypass CORS security blocks for simple saves
+            await fetch(sheetUrl, { 
+                method: "POST", 
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+                body: JSON.stringify({ timestamp: new Date().toISOString(), data: appData }) 
+            });
+            alert("Data synced to Google Sheets! ☁️✨");
         } catch (error) {
-            console.error("Backup failed", error); alert("Failed to backup. Make sure the Webhook URL is correct.");
-            if(confirm("Would you like to reset your Webhook URL?")) { localStorage.removeItem("sheetWebhookUrl"); }
-        } finally { btn.innerHTML = originalText; }
+            console.error("Save failed", error); 
+            alert("Failed to sync. Make sure your Webhook URL is correct.");
+            if(confirm("Would you like to reset your Webhook URL?")) { 
+                localStorage.removeItem("sheetWebhookUrl"); 
+            }
+        } finally { 
+            btn.innerHTML = originalText; 
+        }
     }
 
-    // Initialize the app by pulling saved local data (if any), then rendering
-    loadFromLocalStorage();
-    renderAll();
+    // Start the app by grabbing cloud data first!
+    loadFromCloud();
 </script>
 </body>
 </html>
